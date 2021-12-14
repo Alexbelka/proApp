@@ -1,4 +1,3 @@
-
 let btn = document.getElementById('pressBtn');
 let root = document.getElementById('root');
 let menu = document.getElementById('menu');
@@ -19,7 +18,7 @@ class PersonsList{
 
     async fetchPosts(){
  
-        const responseUsers = await createRequest() 
+        let responseUsers = await createRequest() 
         
         for(let i = 0; i < responseUsers.length; i++){
         
@@ -32,27 +31,20 @@ class PersonsList{
                }
             })
           }   
-       
+
+    
     for(let i in responseUsers){
 
-      const person = new PersonItem(responseUsers[i])
-
-      person.render()
-
+       const person = new PersonItem(responseUsers[i])
+    
+      menu.appendChild(person.render())
+   
     }
 
      }
 
-   async getData(){
-
-    const data = await fetchPosts()
-   
-    console.log(data)
-
-   }
-
      begin(){
-       
+
         const btn = document.getElementById('pressBtn');
 
         btn.addEventListener('click',this.fetchPosts.bind(this))
@@ -61,15 +53,16 @@ class PersonsList{
 }
 
 
-let getData = new PersonsList().begin()
-
-
 class PersonItem{
     constructor(person){
       this.person = person
     }
+ 
+identifyItem(){
+ App.stay(this.person)
+}
 
-    render(){
+ render(){
  const prodItem = document.createElement('li')
  prodItem.className = 'prod-item'
  prodItem.innerHTML = `
@@ -77,62 +70,59 @@ class PersonItem{
  <h3>${this.person.name}</h3>  
  <h4>${this.person.email}</h4>
  <h5>${this.person.username}</h5>
- <button>Press</button>
+ <button>Удалить пользователя</button>
  ` 
-const menu = document.getElementById('menu')
 
- menu.insertAdjacentElement('afterbegin',prodItem)
-
+const getButton = prodItem.querySelector('button') 
+getButton.addEventListener('click',this.identifyItem.bind(this))
+return prodItem
   }
 }
 
 
-// for(let i = 0; i < collection.length; i++){
+class PersonBasket{
+  constructor(){}
+  items = [1];
+  
+  addItem(product){
+    this.items.push(product)
+    console.log(this.items)
+    // this.totalOutput = `<h2>Total:\$${1}</h2>`
+  }
 
-// let target = new PersonsItem(collection[i]).person
-
-// console.log(target)
-
-// }
-
-// var html = collection.map(function(item) {
-//     return '<li>' + item.id + ' ' + item.name + ' (' + item.email + ')</li>'
-//   })
-//   menu.insertAdjacentHTML('afterbegin', html.join(' '))
-
-// class PersonItem{
-// constructor(person){
-// this.person = person
-// }
-// create(){
-//     // const person = document.createElement('li');
-//     // person.className = 'person';
-//     // person.innerHTML = `<div>
-//     // <h3>${this.person.id}</h3>
-//     // <h3>${this.person.name}</h3>
-//     // <h3>${this.person.email}</h3>
-//     // </div>`;
-//     console.log('!!!')
-//  }
-// }
+  render(){
+    this.item = new PersonItem();
+    const section = document.createElement('section');
+    console.log(this.items)
+    section.innerHTML = `
+    <h2>Total:\$${this.items.length}</h2>
+    <button>Order Now!!</button>
+    `;
+    section.className = 'cart'
+    this.totalOutput = section.querySelector('h2')
+    return section;
+  }
+}
 
 
-// class PersonsItem{
-// constructor(item,name,id,email){
-// this.name = item.name
-// this.id = item.id
-// this.email = item.email
-//     }
-//     create(){
-//         console.log('!!!')
-//     }
-// }
+class App {
+  constructor(){}
+  static render(){
+    let getData = new PersonsList();
+    getData.begin();
+    const basket = new PersonBasket().render();
+    root.append(basket);
+  }
+   static stay(item){
+    this.unit = new PersonBasket()
+    console.log(item)
+    this.unit.addItem(item)
+  }
+}
 
-// let r = new PersonsItem();
+ App.render()
 
-// console.log(r)
 
-// btn.addEventListener('click',fetchPosts)
 
 
 
